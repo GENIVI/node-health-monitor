@@ -1,0 +1,38 @@
+1.3.3
+=====
+* Two bugfixes for start up and error cases
+* Improvement of systemd watchdog support
+
+1.3.2
+=====
+* The handling of "restart_apps" has changed. Before this was a white list. 
+  Only apps on the listed were allowed to restart the target. Now every app  
+  is allowed to request a restart and only those on the list are blocked.
+
+1.3.1
+=====
+* The NHM can now observe failing units via systemd. Furthermore, it catches the
+* SIGTERM signal to properly shut down on systemd requests.   
+
+1.2.1
+=====
+* Adaption of NHM to the new interface of the persistence client library.
+
+1.2.0
+=====
+* The NHM can now observe the D-Bus. Observed busses can be configured
+* as "monitored_dbus" in the conf file. Observation is done by calling
+* the "GetId" method of the org.freedesktop.DBus default bus memeber, 
+* every "ul_chk_interval".
+
+1.1.0
+=====
+* The "shutdown flag" will now be stored via the GENIVI Persistency,
+* instead of using the file "${datdir}/lib/shutdownflag"
+
+1.0.0
+=====
+* First release of the NodeHealthMonitor (NHM)
+* D-Bus interfaces: All currently specified dbus interfaces are provided
+* Userland checks:  NHM can check if: files are present, processes are running
+                    and if processes return valid (see node-health-monitor.conf)

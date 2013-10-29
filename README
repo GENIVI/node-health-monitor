@@ -1,0 +1,28 @@
+NodeHealthMonitor (NHM) README
+================================================================================
+
+This is the official source of the NodeHealthMonitor. At present, all
+relevant documentation for this project is available in the GENIVI wiki on:
+
+https://collab.genivi.org/wiki/display/genivi/SysInfraEGLifecycleRequirements
+
+
+License
+-------
+
+For licensing info see the COPYING file, distributed along with this project.
+
+
+Build Dependencies and Instructions
+-----------------------------------
+
+The NodeHealthMonitor needs the following packages installed, to be compiled:
+  - automotive-dlt             >= 2.2.0
+  - glib-2.0                   >= 2.30.0
+  - node-state-manager         >= 1.2.0.0
+  - persistence_client_library
+
+Dependencies to "dbus-1" can be solved by passing "--with-dbussystemunitdir"
+and "--with-dbusinterfacesdir" to the configure script.
+Dependencies to "systemd" can be solved by passing "--with-systemdsystemunitdir"
+to the configure script.

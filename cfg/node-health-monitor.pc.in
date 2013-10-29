@@ -1,0 +1,14 @@
+# Package config file for node-health-monitor
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+dbusinterfacesdir=${pc_sysrootdir}@dbusinterfacesdir@
+
+Name: node-health-monitor (NHM)
+Description: Package information for the NHM.
+URL: http://www.genivi.org
+Version: @VERSION@
+Cflags: -I${includedir}

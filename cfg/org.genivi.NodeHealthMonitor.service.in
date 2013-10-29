@@ -1,0 +1,6 @@
+# This file is for starting the NHM daemon when it is requested via dbus
+
+[D-BUS Service]
+Name=org.genivi.NodeHealthMonitor
+SystemdService=node-health-monitor.service
+Exec=/bin/false

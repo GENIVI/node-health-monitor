@@ -1,0 +1,32 @@
+23rd Oct 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Bugfix for crash at startup. If a service failed before dbus connection was
+    obtained, a sgementation fault occured in "nhm_main_register_app_status".
+  * Fixed a bug in "nhm_main_is_process_running" found with Klocwork.
+    There was a possibility to dereference the uninitialized "error" variable.
+  * Corrected the systemd watchdog support. Cycle time is now retrieved from
+    WATCHDOG_USEC environment variable.
+  * Fixed some Klocwork comments
+  * Adapted the unit test
+
+14th Aug 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Changed handling of restart_apps
+
+17th Jun 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Introduced systemd observation.
+    NHM will use systemd dbus interface to recognize failing apps.
+  * Added internal trace abstraction
+  * Implemented registration for catching SIGTERM signal
+
+09th Jul 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Call Init/DeInit of PCL to support version 6.0.0
+
+15th May 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Introduced dbus observation. Added new config. key, adapted source code.
+    Extended unit test to cover new functionality.
+
+02nd May 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Adapted code to store "shutdown flag" via GENIVI Persistency,
+    instead of using the file "${datadir}/lib/shutdownflag".
+
+15th Mar 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Initial revision

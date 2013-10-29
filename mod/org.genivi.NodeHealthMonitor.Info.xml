@@ -1,0 +1,108 @@
+<!--
+*
+* Copyright (C) 2013 Continental Automotive Systems, Inc.
+*
+* Author: Jean-Pierre.Bogler@continental-corporation.com
+*
+* Describes the "Info" interface of the NodeHealthMonitor
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*
+* Date           Author             Reason
+* 05th Feb. 2013 Jean-Pierre Bogler Initial creation
+*
+-->
+
+<node>
+  <!-- org.genivi.NodeHealthMonitor.Info:
+       This is a DBUS interface that is used to interact between interested 
+       parties and the Node Health Monitor.
+  -->
+  <interface name="org.genivi.NodeHealthMonitor.Info">
+    <!-- RegisterAppStatus:
+         @AppName:   Type='STRING'; Description='This is the unit name of the 
+                     application that has failed'
+         @AppStatus: Type='NhmAppStatus_e'; Description='This can be used to 
+                     specify the status of the application that has failed. 
+                     It will be based upon the enum NHM_ApplicationStatus_e'
+         
+         This method will be used by an NHM client to register that an 
+         application has failed or recovered from a previous failure.
+         The Node Health Monitor will maintain an internal list of the 
+         applications that are currently in a failed state. 
+         Additionally it will maintain a count of the currently failed 
+         applications that can be used to trigger a system restart if the 
+         value gets too high.
+         
+         The NHM will also call the NSM method SetAppHealthStatus which will 
+         allow the NSM to disable any sessions that might have been enabled 
+         by the failed application.
+     -->
+    <method name="RegisterAppStatus">
+      <arg name="AppName" type="s" direction="in" />
+      <arg name="AppStatus" type="i" direction="in" />
+    </method>
+
+    <!-- ReadStatistics:
+         @AppName: Type='STRING'; Description='This will be the name of the 
+                   application for which the calling application wants to know 
+                   the failure count for. If this value is an empty string the 
+                   NHM will return the failure statistics for the whole node'
+         @CurrentFailCount: Type='UINT32'; Description='This value will be the 
+                            number of failures that have occurred in this 
+                            lifecycle'
+         @TotalFailures: Type='UINT32'; Description='This will be the total 
+                         number of failures that have occurred in the past X 
+                         amount of lifecycles. The value of X will be 
+                         configurable at build time'
+         @TotalLifecycles: Type='UINT32'; Description='This value will be the 
+                           number of lifecycles that are being used for the 
+                           statistics collection (i.e. 5 failures in 8 LCs)'
+         @ErrorStatus: Type='NhmError_Status_e'; Description='This parameter 
+                       will be used as a return value'
+         
+         This method can be used to read the failure count of either a 
+         particular application or of the Node itself
+     -->
+    <method name="ReadStatistics">
+      <arg name="AppName" type="s" direction="in" />
+      <arg name="CurrentFailCount" type="u" direction="out" />
+      <arg name="TotalFailures" type="u" direction="out" />
+      <arg name="TotalLifecycles" type="u" direction="out" />
+      <arg name="ErrorStatus" type="i" direction="out" />
+    </method>
+
+    <!-- RequestNodeRestart:
+         @AppName: Type='STRING'; Description='This is the unit name of the 
+                   application that has failed'
+         @ErrorStatus: Type='NhmError_Status_e'; Description='This parameter 
+                       will be used as a return value'
+         
+         This method can be used by an NHM client to request a node restart if 
+         a critical application can not be recovered. The Node Health Monitor 
+         will have the possibility to internally evaluate whether the failed 
+         application is important enough to warrant the restarting of the node.
+         
+         The NHM will then forward the request to the NSM who will evaluate 
+         whether a restart is allowed at the current time.
+     -->
+    <method name="RequestNodeRestart">
+      <arg name="AppName" type="s" direction="in" />
+      <arg name="ErrorStatus" type="i" direction="out" />
+    </method>
+
+    <!-- AppHealthStatus:
+         @AppName: Type='STRING'
+         @AppStatus: Type='AppHealthStatus'
+         
+         This DBUS signal can be used by a client to be notified about 
+         AppHealth status changes
+     -->
+    <signal name="AppHealthStatus">
+      <arg name="AppName" type="s" />
+      <arg name="AppStatus" type="i" />
+	</signal>
+  </interface>
+</node>

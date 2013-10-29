@@ -1,0 +1,15 @@
+# This file is for starting the NHM as a daemon with systemd
+
+[Unit]
+Description=node-health-monitor to observe system health
+Requires=nodestatemanager-daemon.service dlt-daemon.service
+After=nodestatemanager-daemon.service dlt-daemon.service
+
+[Service]
+Type=notify
+ExecStart=@bindir@/node-health-monitor
+TimeoutSec=300
+WatchdogSec=20
+
+[Install]
+WantedBy=basic.target
