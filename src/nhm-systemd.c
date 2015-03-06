@@ -411,7 +411,6 @@ nhm_systemd_unit_get_active_state(NhmSystemdUnit *unit)
 {
   GError         *error   = NULL;
   GVariant       *propval = NULL;
-  GVariant       *child   = NULL;
   const gchar    *state   = NULL;
   NhmActiveState  retval  = NHM_ACTIVE_STATE_UNKNOWN;
 
@@ -431,8 +430,7 @@ nhm_systemd_unit_get_active_state(NhmSystemdUnit *unit)
 
   if(error == NULL)
   {
-    child  = g_variant_get_child_value(propval, 0);
-    state  = g_variant_get_string(child, NULL);
+    g_variant_get_child(propval, 0, "&s", &state);
     retval = nhm_systemd_active_state_string_to_enum(state);
     g_variant_unref(propval);
   }
@@ -476,7 +474,6 @@ nhm_systemd_unit_added(GDBusConnection *connection,
 {
   NhmSystemdUnit *unit       = NULL;
   const gchar    *param_type = NULL;
-  GVariant       *child      = NULL;
   NhmSystemdUnit  search_unit;
   GSList         *list_item  = NULL;
 
@@ -484,8 +481,7 @@ nhm_systemd_unit_added(GDBusConnection *connection,
 
   if(g_strcmp0(param_type, "(so)") == 0)
   {
-    child = g_variant_get_child_value(parameters, 0);
-    search_unit.name = (gchar*) g_variant_get_string(child, NULL);
+    g_variant_get_child(parameters, 0, "&s", &search_unit.name);
 
     if(g_str_has_suffix(search_unit.name, ".service") == TRUE)
     {
@@ -497,8 +493,7 @@ nhm_systemd_unit_added(GDBusConnection *connection,
         unit = g_new(NhmSystemdUnit, 1);
         unit->name = g_strdup(search_unit.name);
 
-        child = g_variant_get_child_value(parameters, 1);
-        unit->path = g_variant_dup_string(child, NULL);
+        g_variant_get_child(parameters, 1, "s", &unit->path);
 
         unit->active_state = nhm_systemd_unit_get_active_state(unit);
         unit->sig_sub_id   = nhm_systemd_subscribe_properties_changed(unit);
@@ -548,15 +543,13 @@ nhm_systemd_unit_removed(GDBusConnection *connection,
 {
   GSList         *list_item  = NULL;
   const gchar    *param_type = NULL;
-  GVariant       *child      = NULL;
   NhmSystemdUnit  search_unit;
 
   param_type = g_variant_get_type_string(parameters);
 
   if(g_strcmp0(param_type, "(so)") == 0)
   {
-    child = g_variant_get_child_value(parameters, 0);
-    search_unit.name = (gchar*) g_variant_get_string(child, NULL);
+    g_variant_get_child(parameters, 0, "&s", &search_unit.name);
 
     if(g_str_has_suffix(search_unit.name, ".service") == TRUE)
     {
@@ -620,8 +613,7 @@ nhm_systemd_unit_properties_changed(GDBusConnection *connection,
 
   if(g_strcmp0(param_type, "(sa{sv}as)") == 0)
   {
-    inv_props = g_variant_get_strv(g_variant_get_child_value(parameters, 2),
-                                   NULL);
+    g_variant_get_child(parameters, 2, "^a&s", &inv_props);
 
     if(nhm_helper_str_in_strv("ActiveState", (gchar**) inv_props) == TRUE)
     {
@@ -810,8 +802,7 @@ nhm_systemd_connect(NhmSystemdAppStatusCb app_status_cb)
           new_unit = g_new(NhmSystemdUnit, 1);
           new_unit->name = unit_name;
 
-          active_state =
-              g_variant_get_string(g_variant_get_child_value(unit, 3), NULL);
+          g_variant_get_child(unit, 3, "&s", &active_state);
 
           new_unit->active_state =
               nhm_systemd_active_state_string_to_enum(active_state);
@@ -830,6 +821,7 @@ nhm_systemd_connect(NhmSystemdAppStatusCb app_status_cb)
         }
       }
 
+      g_variant_unref(unit_array);
       g_variant_unref(manager_return);
     }
     else

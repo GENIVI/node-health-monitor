@@ -1,3 +1,8 @@
+19th Nov 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Fixed memory leaks. The children returned by "g_variant_get_child_value" were 
+    not freed. Instead of "g_variant_get_child_value", "g_variant_get_child" now 
+    is used at most places in nhm_systemd.c
+
 23rd Oct 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
   * Bugfix for crash at startup. If a service failed before dbus connection was
     obtained, a sgementation fault occured in "nhm_main_register_app_status".
