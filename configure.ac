@@ -15,7 +15,7 @@
 ################################################################################
 
 # Initialize autoconf
-AC_INIT([node-health-monitor], [1.3.4])
+AC_INIT([node-health-monitor], [1.3.5])
 AC_PREREQ([2.50])
 AC_COPYRIGHT([Copyright (c) 2013 Continental Automotive GmbH])
 

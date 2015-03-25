@@ -1,3 +1,9 @@
+24th Mar 2015 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
+  * Added CODING_STYLE file
+  * Updated README to provide more information about the package
+  * Added .gitignore
+  * Fix: Only call "g_type_init" if glib < 2.36.0 to avoid deprecated warning.
+
 19th Nov 2013 Jean-Pierre Bogler <Jean-Pierre.Bogler@continental-corporation.com>
   * Fixed memory leaks. The children returned by "g_variant_get_child_value" were 
     not freed. Instead of "g_variant_get_child_value", "g_variant_get_child" now 

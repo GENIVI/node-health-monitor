@@ -2302,8 +2302,10 @@ main(void)
           DLT_STRING("NHM: NodeHealthMonitor started."),
           DLT_STRING("Version:"), DLT_STRING(VERSION ));
 
-  /* Initialize glib for using "g" types */
-  g_type_init();
+#if !GLIB_CHECK_VERSION(2,36,0)
+    /* Initialize glib for using "g" types. Only necessary until version 2.36 */
+    g_type_init();
+#endif
 
   /* Initialize components variables */
   nhm_main_init();

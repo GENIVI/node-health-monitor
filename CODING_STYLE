@@ -1,0 +1,118 @@
+Coding style
+============
+
+Many parts of the NodeHealthMonitor (NHM) are using the interface of the GNOME 
+glib library and the gdbus binding. Because of the many glib calls, it made 
+sense to align the remaining NHM code in a similar style. Please make sure to 
+follow the definitions here, to make the code more easy to maintain!
+
+Project structure
+-----------------
+
+The sources of the NHM are located in different subfolders, based on their 
+content. The following subfolders are used:
+
+  cfg: initial configuration, systemd service files, "package config" file 
+       and other administrative files.
+  doc: Documentation
+  gen: Destination for generated code.
+  inc: Public header files (see chapter 5.2).
+  mod: models to generate code (e.g. dbus XML interfaces).
+  src: Source code of the NHM.
+  tst: Unit test for the NHM and stubs to replace system functions.
+
+The C source code of the project should be devided into seperate files. 
+The source files should start with a comment, describing what they represent.
+
+Naming conventions
+------------------
+
+  - The source files should be named "nhm-<purpose>", where purpose describes 
+    the functionality that the file implements. 
+  - The functions/symbols should be named "nhm_<purpose>_<symbol>".
+  - There is no hungarian notation.
+
+
+Variable declaration
+--------------------
+
+Local variables may only be declared at the beginning of a function.
+
+
+Line width
+----------
+
+The monitors are getting bigger, but the integrated development environments 
+(IDE) are getting more windows. Therefore, maximum line width should be 80 
+wherever possible.
+
+
+Intendation
+-----------
+
+The intendation is two spaces, no tabs.
+
+
+Braces
+------
+
+  - All curly braces come into the next line (except for variable initializers) 
+  - Curly braces are not intended
+
+
+if/else statements
+------------------
+
+  - All branches should be surrounded by curly braces.
+
+
+Comments
+--------
+
+Only the C89 comment symbols "/* */" may be used.
+
+
+White spaces
+------------
+
+There is no whitspace before parenthesis:
+
+  /* good */
+  void nhm_example_print_some_numbers()
+  {
+    for(i = 0; i < 1000; i++)
+    {
+      if(i % 10 == 0)
+      {
+        printf("%i\n", i);
+      }
+    }
+  }
+
+
+switch/case statements
+----------------------
+
+The "break" should have the same intendation level as the "case" 
+to which it belongs:
+    
+  /* good */
+  void nhm_example_define_to_text(const gint def)
+  {
+    switch(def)
+    {
+      case TEST1:
+        g_print("Test 1\n");
+      break;
+
+      case TEST2:
+        g_print("Test 2\n");
+      break;
+
+      default:
+        g_print("unknown\n");
+      break;
+    }
+  }
+
+
