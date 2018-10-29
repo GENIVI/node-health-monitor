@@ -19,3 +19,8 @@
 
 # Build trough subfolders. Make sure "gen" is called before "src" and "tst".
 SUBDIRS = cfg gen inc mod src tst
+
+# A README is required according to GNU coding standards and autoreconf
+# will otherwise fail.  Since we use README.md, this build rule is one
+# workaround (there are other ways too)
+README: README.md
