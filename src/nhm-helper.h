@@ -41,5 +41,8 @@ DLT_IMPORT_CONTEXT(nhm_helper_trace_ctx);
 gboolean nhm_helper_str_in_strv(const gchar *str,
                                 gchar       *strv[]);
 
+/* Parse systemd service values, added by HMC */
+gboolean nhm_helper_str_in_GVariant(const gchar* str,
+								GVariant* var);
 
 #endif /* NHM_HELPER_H */

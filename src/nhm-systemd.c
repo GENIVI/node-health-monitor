@@ -429,9 +429,13 @@ nhm_systemd_unit_get_active_state(NhmSystemdUnit *unit)
                                         &error);
 
   if(error == NULL)
-  {
-    g_variant_get_child(propval, 0, "&s", &state);
+  {   
+    GVariant* value;
+    g_variant_get(propval, "(v)", &value);
+    state = g_variant_get_string(value, NULL);
+	
     retval = nhm_systemd_active_state_string_to_enum(state);
+    g_variant_unref(value);
     g_variant_unref(propval);
   }
   else
@@ -493,8 +497,8 @@ nhm_systemd_unit_added(GDBusConnection *connection,
         unit = g_new(NhmSystemdUnit, 1);
         unit->name = g_strdup(search_unit.name);
 
-        g_variant_get_child(parameters, 1, "s", &unit->path);
-
+        g_variant_get_child(parameters, 1, "o", &unit->path);
+		
         unit->active_state = nhm_systemd_unit_get_active_state(unit);
         unit->sig_sub_id   = nhm_systemd_subscribe_properties_changed(unit);
 
@@ -605,7 +609,6 @@ nhm_systemd_unit_properties_changed(GDBusConnection *connection,
                                     gpointer         user_data)
 {
   NhmSystemdUnit  *unit         = (NhmSystemdUnit*) user_data;
-  const gchar    **inv_props    = NULL;
   NhmActiveState   active_state = NHM_ACTIVE_STATE_UNKNOWN;
   const gchar     *param_type   = NULL;
 
@@ -613,19 +616,19 @@ nhm_systemd_unit_properties_changed(GDBusConnection *connection,
 
   if(g_strcmp0(param_type, "(sa{sv}as)") == 0)
   {
-    g_variant_get_child(parameters, 2, "^a&s", &inv_props);
-
-    if(nhm_helper_str_in_strv("ActiveState", (gchar**) inv_props) == TRUE)
-    {
+    GVariant* childVar;
+    childVar = g_variant_get_child_value(parameters, 1);    
+    if ( nhm_helper_str_in_GVariant("ActiveState", childVar) == TRUE ) {
       active_state = nhm_systemd_unit_get_active_state(unit);
-
       if(active_state != unit->active_state)
       {
         nhm_systemd_unit_active_state_changed(unit, active_state);
       }
     }
 
-    g_free(inv_props);
+    if ( childVar != NULL ) {
+       g_variant_unref(childVar);
+    }
   }
   else
   {
