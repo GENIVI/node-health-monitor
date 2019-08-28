@@ -78,3 +78,22 @@ nhm_helper_str_in_strv(const gchar *str,
 
   return retval;
 }
+
+gboolean nhm_helper_str_in_GVariant(const gchar* str,
+                GVariant* var) {
+  gboolean retval = FALSE;
+
+  GVariantIter iter;
+  gchar *item;
+  GVariant *value;
+
+  g_variant_iter_init(&iter, var);
+  while ( g_variant_iter_loop(&iter, "{sv}", &item, &value) ) {    
+    if ( g_strcmp0(str, item) == 0 ) {
+      retval = TRUE;
+      break;
+    }
+  }
+
+  return retval;
+}
